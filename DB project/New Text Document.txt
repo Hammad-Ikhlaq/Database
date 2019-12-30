@@ -1,0 +1,248 @@
+
+create database Lab_7
+use Lab_7
+
+create table Students
+(RollNo varchar(7) primary key
+,Name varchar(30)
+,WarningCount int
+,Department varchar(15)
+)
+GO
+INSERT [dbo].[Students] ([RollNo], [Name], [WarningCount], [Department]) VALUES (N'1', N'Ali', 0, N'CS')
+INSERT [dbo].[Students] ([RollNo], [Name], [WarningCount], [Department]) VALUES (N'2', N'Bilal', 0, N'CS')
+INSERT [dbo].[Students] ([RollNo], [Name], [WarningCount], [Department]) VALUES (N'3', N'Ayesha', 0, N'CS')
+INSERT [dbo].[Students] ([RollNo], [Name], [WarningCount], [Department]) VALUES (N'4', N'Ahmed', 0, N'CS')
+INSERT [dbo].[Students] ([RollNo], [Name], [WarningCount], [Department]) VALUES (N'5', N'Sara', 0, N'EE')
+INSERT [dbo].[Students] ([RollNo], [Name], [WarningCount], [Department]) VALUES (N'6', N'Salman', 1, N'EE')
+INSERT [dbo].[Students] ([RollNo], [Name], [WarningCount], [Department]) VALUES (N'7', N'Zainab', 2, N'CS')
+INSERT [dbo].[Students] ([RollNo], [Name], [WarningCount], [Department]) VALUES (N'8', N'Danial', 1, N'CS')
+
+go
+create table Courses
+(
+CourseID int primary key,
+CourseName varchar(40),
+PrerequiteCourseID int,
+CreditHours int
+) 
+GO
+INSERT [dbo].[Courses] ([CourseID], [CourseName], [PrerequiteCourseID],CreditHours) VALUES (10, N'Database Systems', 20, 3)
+INSERT [dbo].[Courses] ([CourseID], [CourseName], [PrerequiteCourseID],CreditHours) VALUES (20, N'Data Structures', 30,3)
+INSERT [dbo].[Courses] ([CourseID], [CourseName], [PrerequiteCourseID],CreditHours) VALUES (30, N'Programing', NULL,3)
+INSERT [dbo].[Courses] ([CourseID], [CourseName], [PrerequiteCourseID],CreditHours) VALUES (40, N'Basic Electronics', NULL,3)
+go
+
+go
+Create table Instructors 
+(
+InstructorID int Primary key,
+Name varchar(30),
+Department varchar(7) ,
+)
+GO
+INSERT [dbo].[Instructors] ([InstructorID], [Name], [Department]) VALUES (100, N'Ishaq Raza', N'CS')
+INSERT [dbo].[Instructors] ([InstructorID], [Name], [Department]) VALUES (200, N'Zareen Alamgir', N'CS')
+INSERT [dbo].[Instructors] ([InstructorID], [Name], [Department]) VALUES (300, N'Saima Zafar', N'EE')
+go
+Create table Semester
+(
+Semester varchar(15) Primary key,
+[Status] varchar(10),
+)
+GO
+INSERT [dbo].[Semester] ([Semester], [Status]) VALUES (N'Fall2016', N'Complete')
+INSERT [dbo].[Semester] ([Semester], [Status]) VALUES (N'Spring2016', N'Complete')
+INSERT [dbo].[Semester] ([Semester], [Status]) VALUES (N'Spring2017', N'InProgress')
+INSERT [dbo].[Semester] ([Semester], [Status]) VALUES (N'Summer2016', N'Cancelled')
+go
+Create table Course_Semester
+(
+InstructorID int Foreign key References Instructors(InstructorID),
+CourseID int Foreign key References Courses(CourseID),
+Semester varchar(15) Foreign key References Semester(Semester), 
+Section varchar(1) ,
+AvailableSeats int,
+Department varchar(2)
+)
+GO
+INSERT [dbo].[Course_Semester] ([InstructorID], [CourseID], [Semester], [Section], [AvailableSeats], [Department]) VALUES (200, 10, N'Spring2017', N'D', 45, N'CS')
+INSERT [dbo].[Course_Semester] ([InstructorID], [CourseID], [Semester], [Section], [AvailableSeats], [Department]) VALUES (200, 10, N'Spring2017', N'C', 0, N'CS')
+INSERT [dbo].[Course_Semester] ([InstructorID], [CourseID], [Semester], [Section], [AvailableSeats], [Department]) VALUES (100, 10, N'Spring2017', N'A', 6, N'CS')
+INSERT [dbo].[Course_Semester] ([InstructorID], [CourseID], [Semester], [Section], [AvailableSeats], [Department]) VALUES (300, 40, N'Spring2017', N'A', 6, N'CS')
+INSERT [dbo].[Course_Semester] ([InstructorID], [CourseID], [Semester], [Section], [AvailableSeats], [Department]) VALUES (300, 40, N'Spring2016', N'A', 6, N'CS')
+INSERT [dbo].[Course_Semester] ([InstructorID], [CourseID], [Semester], [Section], [AvailableSeats], [Department]) VALUES (200, 10, N'Spring2016', N'A', 0, N'CS')
+
+go
+
+
+
+create table Registration
+(
+Semester varchar(15) Foreign key References Semester(Semester),
+RollNumber  varchar(7) Foreign key References Students(RollNo),
+CourseID int Foreign key References Courses(CourseID), 
+Section varchar(1),
+GPA float
+)
+INSERT [dbo].[Registration] ([Semester], [RollNumber], [CourseID], [Section],GPA) VALUES (N'Fall2016', N'1', 20, N'A', 3.3)
+INSERT [dbo].[Registration] ([Semester], [RollNumber], [CourseID], [Section],GPA) VALUES (N'Fall2016', N'2', 20, N'B', 4)
+INSERT [dbo].[Registration] ([Semester], [RollNumber], [CourseID], [Section],GPA) VALUES (N'Spring2016', N'1', 30, N'A', 1.0)
+INSERT [dbo].[Registration] ([Semester], [RollNumber], [CourseID], [Section],GPA) VALUES (N'Fall2016', N'6', 40, N'D',0.0)
+INSERT [dbo].[Registration] ([Semester], [RollNumber], [CourseID], [Section],GPA) VALUES (N'Spring2017', N'6', 40, N'D',1)
+
+
+go
+
+Create table ChallanForm
+(Semester varchar(15) Foreign key References Semester(Semester),
+RollNumber  varchar(7) Foreign key References Students(RollNo),
+TotalDues int,
+[Status] varchar(10)
+)
+GO
+INSERT [dbo].[ChallanForm] ([Semester], [RollNumber], [TotalDues], [Status]) VALUES (N'Fall2016', N'1', 100000, N'Paid')
+INSERT [dbo].[ChallanForm] ([Semester], [RollNumber], [TotalDues], [Status]) VALUES (N'Fall2016', N'2', 13333, N'Paid')
+INSERT [dbo].[ChallanForm] ([Semester], [RollNumber], [TotalDues], [Status]) VALUES (N'Fall2016', N'3', 5000, N'Paid')
+INSERT [dbo].[ChallanForm] ([Semester], [RollNumber], [TotalDues], [Status]) VALUES (N'Fall2016', N'4', 20000, N'Pending')
+
+
+select * from Students
+select * from Courses
+select * from Instructors
+select * from Registration
+select * from Semester
+select * from Course_Semester
+select * from ChallanForm
+
+create table notify
+(
+notID int not null unique,
+notSt varchar(100) not null,
+stuID varchar(7)
+foreign key references students(RollNo) on delete no action on update cascade
+)
+
+
+
+--alter procedure seat_check @CID int , @seats int output,@sec varchar(1) output
+--as begin 
+--select @seats=availableseats,@sec=section from Courses_Semester
+--where courseid=@CID and availableseats>0 
+--order by availableseats asc
+--end
+
+
+
+
+--create trigger register
+--on registration
+--instead of insert
+
+--as begin
+--declare @seats int,@sec varchar(1),@CID int
+
+--select @seats=availableseats,@sec=section from Courses_Semester
+--where courseid=@CID and availableseats>0 
+--order by availableseats asc
+--if(@seats>0)
+--begin
+--print 'Seats Available!'
+--insert into notify
+--values (100,1,'Successful')
+--end
+--else
+--begin 
+--print 'No Seats Available!'
+--insert into notify
+--values (100,1,'Un-Successful')
+--end
+
+--end
+
+
+--declare @seats int,@sec varchar(1)
+--execute seat_check 10,@seats output,@sec output
+--select @seats
+--select @sec
+
+
+--if((select top (1)availableseats from Courses_Semester where courseid=10 and availableseats>0  order by availableseats desc)>0)
+--begin
+--update course_semester
+--set availableseats=1
+--where (availableseats=(select top (1)availableseats from Courses_Semester where courseid=10 and availableseats>0  order by availableseats desc) and courseid=10)
+--end
+
+--else begin print'no'
+--end
+
+--Question 2
+alter trigger fee_check
+on registration
+instead of insert
+as begin
+declare @roll varchar(7)
+select @roll=rollnumber from inserted
+if((select count(*) from challanform where RollNumber=@roll and totaldues>=20000 and challanform.[status]='pending')>0)
+begin
+print 'You cannot register in another course as there is pending fee' 
+end
+else
+begin 
+declare @sem varchar(15),@cid int,@sec varchar(1)
+select @sem=semester from inserted
+select @cid=courseid from inserted
+select @sec=section from inserted
+
+INSERT [dbo].[Registration] ([Semester], [RollNumber], [CourseID], [Section],GPA) VALUES (@sem,@roll ,@cid ,@sec, -1)
+end
+
+end
+
+
+INSERT [dbo].[Registration] ([Semester], [RollNumber], [CourseID], [Section],GPA) VALUES (N'Fall2016', N'4', 10, N'A', -1)
+select * from registration
+
+--Question 3
+go
+alter trigger del_course
+on courses_semester 
+instead of delete
+as begin
+	declare @cid int,@seats int,@sem varchar(15)
+	select @cid=courseid from inserted 
+	select @sem=semester from inserted
+	select @seats=availableseats from Courses_Semester where courseid=@cid and semester=@sem
+if( @seats<10)
+	begin
+		print'Not Possible'
+	end
+
+else
+	begin
+		delete from courses_semester where courseid=@cid and semester=@sem
+		print 'Succefully deleted!'
+	end
+
+end
+
+delete from Courses_Semester where courseid=10 and semester='spring2017'
+select* from courses_semester
+
+
+
+--Question 4
+create trigger secure_Ins_tab
+on instructors
+instead of insert,delete
+as begin
+print 'You can not delete or modify this table'
+end
+
+delete instructors
+
+INSERT into [dbo].[Instructors] ([InstructorID], [Name], [Department]) VALUES (400, N'Zain', N'CS')
+
+select* from instructors
+

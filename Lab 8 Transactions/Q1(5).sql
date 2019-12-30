@@ -1,0 +1,1 @@
+update emp set Salary=888 where ID=1
